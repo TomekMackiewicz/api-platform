@@ -24,6 +24,7 @@ services:
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
+      - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:5432/${DATABASE_NAME}?serverVersion=13&charset=utf8"
     volumes:
       - ./symfony:/var/www

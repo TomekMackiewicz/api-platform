@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.8",
+        "lexik/jwt-authentication-bundle": "^2.11",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "symfony/asset": "5.2.*",
@@ -29,8 +30,6 @@
         "symfony/twig-bundle": "5.2.*",
         "symfony/validator": "5.2.*",
         "symfony/yaml": "5.2.*"
-    },
-    "require-dev": {
     },
     "config": {
         "optimize-autoloader": true,
@@ -74,5 +73,8 @@
             "allow-contrib": false,
             "require": "5.2.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.30"
     }
 }

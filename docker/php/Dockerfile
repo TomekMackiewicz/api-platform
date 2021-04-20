@@ -2,7 +2,7 @@ FROM php:8.0.3-fpm-alpine
 COPY wait-for-it.sh /usr/bin/wait-for-it
 RUN apk add --no-cache bash
 RUN chmod +x /usr/bin/wait-for-it
-RUN apk --update --no-cache add git
+RUN apk --update --no-cache add git acl vim
 RUN set -ex \
   && apk --no-cache add \
     postgresql-dev
