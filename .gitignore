@@ -2,3 +2,4 @@
 /logs
 /.env.local
 /docker/database/data
+/symfony/nbproject/private/

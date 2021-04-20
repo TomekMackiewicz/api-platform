@@ -2,13 +2,27 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @ApiResource(
+ *   collectionOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN')"},
+ *     "post"
+ *   },
+ *   itemOperations={
+ *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getId() == user.getId()"},
+ *     "put"={"security"="object.getId() == user.getId()"},
+ *     "delete"={"security"="is_granted('ROLE_ADMIN') or object.getId() == user.getId()"},
+ *     "patch"={"security"="object.getId() == user.getId()"},
+ *   }
+ * )
  */
 class User implements UserInterface
 {
@@ -21,6 +35,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email
      */
     private $email;
 
@@ -32,9 +47,10 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank
      */
     private $password;
-
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -112,7 +128,6 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 }
