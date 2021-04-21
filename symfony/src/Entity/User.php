@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "get"={"security"="is_granted('ROLE_ADMIN') or object.getId() == user.getId()"},
  *     "put"={"security"="object.getId() == user.getId()"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN') or object.getId() == user.getId()"},
- *     "patch"={"security"="object.getId() == user.getId()"},
+ *     "patch"={"security"="is_granted('ROLE_ADMIN') or object.getId() == user.getId()"}
  *   }
  * )
  */
@@ -41,6 +42,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @ApiProperty(security="is_granted('ROLE_ADMIN')")
      */
     private $roles = [];
 
