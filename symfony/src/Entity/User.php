@@ -8,10 +8,12 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
+ * @UniqueEntity("email")
  * @ApiResource(
  *   collectionOperations={
  *     "get"={"security"="is_granted('ROLE_ADMIN')"},
@@ -27,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    const ROLES = ['ROLE_USER', 'ROLE_ADMIN'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -52,7 +56,17 @@ class User implements UserInterface
      * @Assert\NotBlank
      */
     private $password;
-    
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Type(
+     *   type="integer",
+     *   message="The value {{ value }} is not a valid {{ type }}."
+     * )
+     * @ApiProperty(security="is_granted('ROLE_ADMIN')")
+     */
+    private $status;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,6 +124,21 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getStatus(): int
+    {
+        return (int) $this->status;
+    }
+
+    public function setStatus(int $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
