@@ -1,5 +1,5 @@
 /.idea
 /logs
-/.env.local
+/.env.prod
 /docker/database/data
 /symfony/nbproject/private/

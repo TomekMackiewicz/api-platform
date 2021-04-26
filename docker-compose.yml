@@ -4,7 +4,6 @@ services:
   database:
     build:
       context: ./docker/database
-    env_file: ./.env
     environment:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
@@ -12,7 +11,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      #- ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./docker/database/data:/var/lib/postgresql
 
   php:
@@ -20,11 +18,13 @@ services:
       context: ./docker/php
     depends_on:
       - database
-    env_file: ./.env
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
       - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_USER=${DATABASE_USER}
       - DATABASE_URL="postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:5432/${DATABASE_NAME}?serverVersion=13&charset=utf8"
     volumes:
       - ./symfony:/var/www
