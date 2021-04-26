@@ -17,6 +17,9 @@ docker-compose exec php sh -c '
 '
 ```
 
+## Run app
+docker-compose --env-file [env filename] up
+
 ## Run migrations
 
 ```sh
@@ -27,7 +30,7 @@ docker-compose exec php bin/console doctrine:migrations:migrate
 ## Login to postgres
 
 ```sh
-psql -d api_db -U user
+psql -d [dbname] -U user
 ```
 
 Other useful commands:
@@ -43,3 +46,9 @@ Other useful commands:
 ```sh
 /usr/local/etc/php
 ```
+
+## Testing
+
+bin/console hautelook:fixtures:load
+
+bin/phpunit

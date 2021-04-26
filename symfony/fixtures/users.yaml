@@ -1,0 +1,15 @@
+parameters:
+    # Password1
+    hash: $argon2id$v=19$m=65536,t=4,p=1$1n1H3N2SyAqWfUZlqZ1XyQ$lTTLuhNy2zARBw21oucweM/p8aTbuSixeDwqTQkLiUE
+
+App\Entity\User:
+    admin:
+        email: admin@gmail.com
+        roles: [ROLE_ADMIN] #<randomElements(['ROLE_ADMIN', 'ROLE_USER'], 1)>
+        password: <{hash}>
+        status: 1
+    user:
+        email: user@gmail.com
+        roles: [ROLE_USER] #<randomElements(['ROLE_ADMIN', 'ROLE_USER'], 1)>
+        password: <{hash}>
+        status: <numberBetween(0, 1)>
