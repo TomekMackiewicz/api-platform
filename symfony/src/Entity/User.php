@@ -45,7 +45,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\Email
+     * @Assert\Email(
+     *   message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 
@@ -60,7 +62,7 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\Regex(
-     *   pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/",
+     *   pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.).{6,}$/",
      *   message="Password is required to be minimum 6 chars in length and to include at least one letter and one number."
      * )
      */
