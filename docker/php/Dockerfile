@@ -15,10 +15,13 @@ RUN docker-php-ext-install pdo pdo_pgsql
 #RUN sed -i -e 's/;extension=pdo_pgsql/extension=pdo_pgsql/' /usr/local/etc/php/php.ini
 RUN sed -i -e 's/;extension=pdo_pgsql/extension=pdo_pgsql/' /usr/local/etc/php/php.ini-production
 
-#RUN apk del postgresql-dev
-#RUN apk add --upgrade postgresql --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/main/
+RUN apk del postgresql-dev
+RUN apk add --upgrade postgresql --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/main/
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
-CMD composer install ; wait-for-it database:5432 -- bin/console doctrine:migrations:migrate ;  php-fpm
+CMD composer install ; wait-for-it database:5432 -- bin/console doctrine:migrations:migrate ; php-fpm
+
+#RUN chmod -R 775 ./var
+
 EXPOSE 9000
