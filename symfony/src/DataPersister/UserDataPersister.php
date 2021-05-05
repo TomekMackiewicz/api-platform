@@ -36,7 +36,6 @@ class UserDataPersister implements DataPersisterInterface
             $data->setPassword(
                 $this->userPasswordEncoder->encodePassword($data, $data->getPassword())
             );
-            $data->eraseCredentials();
         }
         $this->entityManager->persist($data);
         $this->entityManager->flush();

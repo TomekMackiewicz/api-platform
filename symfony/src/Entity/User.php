@@ -165,11 +165,8 @@ class User implements UserInterface
         return null;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials()
     {
-        $this->plainPassword = null;
+        $this->password = null;
     }
 }
