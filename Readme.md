@@ -2,23 +2,15 @@
 
 ## Installation
 
-- docker-compose up --build
-- Set JWT keys:
 ```sh
-docker-compose exec php sh -c '
-    set -e
-    apk add openssl
-    mkdir -p config/jwt
-    jwt_passphrase=${JWT_PASSPHRASE:-$(grep ''^JWT_PASSPHRASE='' .env | cut -f 2 -d ''='')}
-    echo "$jwt_passphrase" | openssl genpkey -out config/jwt/private.pem -pass stdin -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-    echo "$jwt_passphrase" | openssl pkey -in config/jwt/private.pem -passin stdin -out config/jwt/public.pem -pubout
-    setfacl -R -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
-    setfacl -dR -m u:www-data:rX -m u:"$(whoami)":rwX config/jwt
-'
+docker-compose up --build
 ```
 
 ## Run app
+
+```sh
 docker-compose --env-file [env filename] up
+```
 
 ## Run migrations
 
@@ -49,6 +41,25 @@ Other useful commands:
 
 ## Testing
 
+```sh
 bin/console hautelook:fixtures:load
-
+```
+```sh
 bin/phpunit
+```
+
+## Redis
+
+```sh
+redis-cli
+KEYS *
+GET [key]
+```
+
+## TODO
+
+- finish user tests
+- add username
+- jwt keys chmod!!!
+
+- roles
