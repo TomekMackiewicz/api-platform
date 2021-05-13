@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 final class UserCollectionDataProvider implements ContextAwareCollectionDataProviderInterface, RestrictedDataProviderInterface
 {
     private $cache;
+    private $repository;
 
     public function __construct(AdapterInterface $cache, UserRepository $repository)
     {
