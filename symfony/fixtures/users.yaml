@@ -5,11 +5,13 @@ parameters:
 App\Entity\User:
     admin:
         email: admin@gmail.com
+        username: Admin
         roles: [ROLE_ADMIN] #<randomElements(['ROLE_ADMIN', 'ROLE_USER'], 1)>
         password: <{hash}>
         status: 1
     user:
         email: user@gmail.com
+        username: User
         roles: [ROLE_USER] #<randomElements(['ROLE_ADMIN', 'ROLE_USER'], 1)>
         password: <{hash}>
         status: <numberBetween(0, 1)>
