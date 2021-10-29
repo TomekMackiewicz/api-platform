@@ -3,7 +3,12 @@
 ## Installation
 
 ```sh
-docker-compose up --build
+docker-compose --env-file [env filename] up --build
+```
+
+## Generate jwt keys
+```sh
+php bin/console lexik:jwt:generate-keypair
 ```
 
 ## Run app
