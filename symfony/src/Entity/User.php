@@ -60,7 +60,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @ApiProperty(security="is_granted('ROLE_ADMIN')")
      * @Assert\Choice(choices=User::ROLES, message="Role name is invalid.")
      */
     private $roles = [];
