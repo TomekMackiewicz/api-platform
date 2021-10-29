@@ -243,7 +243,7 @@ class UsersTest extends ApiTestCase
             'auth_bearer' => $json['token'],
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-                'username' => 'Test2'
+                'username' => 'User2'
             ]            
         ]);
 
@@ -267,7 +267,7 @@ class UsersTest extends ApiTestCase
             'auth_bearer' => $json['token'],
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-                'username' => 'Test2'
+                'username' => 'User2'
             ]            
         ]);
 
@@ -291,7 +291,7 @@ class UsersTest extends ApiTestCase
             'auth_bearer' => $json['token'],
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-                'username' => 'Test2'
+                'username' => 'User2'
             ]            
         ]); 
         
@@ -304,20 +304,46 @@ class UsersTest extends ApiTestCase
     # DELETE
     ##############################################################################
 
-    public function testNotLoggedUserCantDeleteUsers()
+    public function testNotLoggedUserCantDeleteUser()
     {
-
+        static::createClient()->request('DELETE', '/api/users/1'); 
+        $this->assertResponseStatusCodeSame(401);
     }
 
-    public function testLoggedUserCantDeleteUsers()
+    public function testLoggedUserCantDeleteUser()
     {
+        $response = static::createClient()->request('POST', '/authentication_token', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'user@gmail.com',
+                'password' => 'Password1',
+            ],
+        ]);
+        $json = $response->toArray();
+
+        static::createClient()->request('DELETE', '/api/users/1', [
+            'auth_bearer' => $json['token']           
+        ]); 
         
+        $this->assertResponseStatusCodeSame(403);        
     }
 
-    public function testAdminCanDeleteUsers()
+    public function testAdminCanDeleteUser()
     {
+        $response = static::createClient()->request('POST', '/authentication_token', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'admin@gmail.com',
+                'password' => 'Password1',
+            ],
+        ]);
+        $json = $response->toArray();
+
+        static::createClient()->request('DELETE', '/api/users/2', [
+            'auth_bearer' => $json['token']           
+        ]); 
         
+        $this->assertResponseStatusCodeSame(204);
     } 
 
-// testChangePassword
 }
