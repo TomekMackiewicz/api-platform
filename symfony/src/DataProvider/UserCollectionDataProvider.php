@@ -30,7 +30,7 @@ final class UserCollectionDataProvider implements ContextAwareCollectionDataProv
         $users = $this->cache->getItem($cacheKey);
         if (!$users->isHit()) {
             $users->set($this->repository->findAll());
-            $users->expiresAfter(new DateInterval('PT1H'));
+            $users->expiresAfter(new \DateInterval('PT1H'));
             $this->cache->save($users);
         }
 
