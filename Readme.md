@@ -47,10 +47,14 @@ Other useful commands:
 ## Testing
 
 ```sh
-bin/console hautelook:fixtures:load
+php bin/console doctrine:query:sql "ALTER SEQUENCE user_id_seq RESTART WITH 1"
+php bin/phpunit
 ```
+
+Or simply:
+
 ```sh
-bin/phpunit
+bash test.sh
 ```
 
 ## Redis
@@ -64,7 +68,7 @@ GET [key]
 ## TODO
 
 - finish user tests
-- add username
-- jwt keys chmod!!!
 
-- roles
+- roles?
+
+The stream or file "/var/www/var/log/test.log" could not be opened in append mode: Failed to open stream: Permission denied

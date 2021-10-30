@@ -25,6 +25,4 @@ WORKDIR /var/www
 
 CMD composer install ; jwt ; wait-for-it database:5432 -- bin/console doctrine:migrations:migrate ; php-fpm
 
-#RUN chmod -R 775 ./var
-
 EXPOSE 9000
