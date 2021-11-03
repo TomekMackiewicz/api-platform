@@ -20,8 +20,8 @@ docker-compose --env-file [env filename] up
 ## Run migrations
 
 ```sh
-docker-compose exec php bin/console doctrine:migrations:diff
-docker-compose exec php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:diff
+php bin/console doctrine:migrations:migrate
 ```
 
 ## Login to postgres
