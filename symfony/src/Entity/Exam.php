@@ -4,15 +4,15 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
-use App\Repository\TestRepository;
+use App\Repository\ExamRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * @ORM\Entity(repositoryClass=TestRepository::class)
- * @ORM\Table(name="test")
+ * @ORM\Entity(repositoryClass=ExamRepository::class)
+ * @ORM\Table(name="exam")
  * @ApiResource(
  *   collectionOperations={
  *     "get",
@@ -26,7 +26,7 @@ use Doctrine\Common\Collections\Collection;
  *   }
  * )
  */
-class Test
+class Exam
 {
     /**
      * @ORM\Id()
