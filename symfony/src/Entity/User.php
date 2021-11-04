@@ -41,13 +41,13 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank
      */
-    private $username;
+    private string $username = '';
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -56,13 +56,13 @@ class User implements UserInterface
      *   message = "The email '{{ value }}' is not a valid email."
      * )
      */
-    private $email;
+    private string $email = '';
 
     /**
      * @ORM\Column(type="json")
      * @Assert\Choice(choices=User::ROLES, message="Role name is invalid.")
      */
-    private $roles = [];
+    private iterable $roles = [];
 
     /**
      * @var string The hashed password
@@ -73,7 +73,7 @@ class User implements UserInterface
      *   message="Password is required to be minimum 6 chars in length and to include at least one letter and one number."
      * )
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -81,9 +81,10 @@ class User implements UserInterface
      *   type="integer",
      *   message="The value {{ value }} is not a valid {{ type }}."
      * )
+     * @Assert\Choice({0, 1})
      * @ApiProperty(security="is_granted('ROLE_ADMIN')")
      */
-    private $status;
+    private ?int $status = null;
 
     public function getId(): ?int
     {

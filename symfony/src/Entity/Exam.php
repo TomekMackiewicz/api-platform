@@ -33,7 +33,7 @@ class Exam
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -43,7 +43,7 @@ class Exam
      *   message="validation.not_string"
      * )
      */
-    private $title;
+    private string $title = '';
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -52,7 +52,7 @@ class Exam
      *   message="validation.not_string"
      * )
      */
-    private $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -61,7 +61,7 @@ class Exam
      *   message="validation.not_string"
      * )
      */
-    private $summary;
+    private ?string $summary = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -70,7 +70,7 @@ class Exam
      *   message="validation.not_int"
      * )
      */
-    private $duration;
+    private ?int $duration = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -79,7 +79,7 @@ class Exam
      *   message="validation.not_int"
      * )
      */
-    private $nextSubmissionAfter;
+    private ?int $nextSubmissionAfter = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -88,7 +88,7 @@ class Exam
      *   message="validation.not_int"
      * )
      */
-    private $ttl;
+    private ?int $ttl = null;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -97,7 +97,7 @@ class Exam
      *   message="validation.not_bool"
      * )
      */
-    private $usePagination;
+    private ?bool $usePagination = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -106,7 +106,7 @@ class Exam
      *   message="validation.not_int"
      * )
      */
-    private $questionsPerPage;
+    private ?int $questionsPerPage = null;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -115,7 +115,7 @@ class Exam
      *   message="validation.not_bool"
      * )
      */
-    private $shuffleQuestions;
+    private ?bool $shuffleQuestions = null;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -124,7 +124,7 @@ class Exam
      *   message="validation.not_bool"
      * )
      */
-    private $immediateAnswers;
+    private ?bool $immediateAnswers = null;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
@@ -133,7 +133,7 @@ class Exam
      *   message="validation.not_bool"
      * )
      */
-    private $restrictSubmissions;
+    private ?bool $restrictSubmissions = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -142,12 +142,13 @@ class Exam
      *   message="validation.not_int"
      * )
      */
-    private $allowedSubmissions;
+    private ?int $allowedSubmissions = null;
 
     // /**
-    //  * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="survey")
+    //  * @var Question[] Questions for this exam.
+    //  * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="survey", cascade={"persist"}) 
     //  */
-    // private $questions;
+    // private iterable $questions;
 
     // public function __construct()
     // {

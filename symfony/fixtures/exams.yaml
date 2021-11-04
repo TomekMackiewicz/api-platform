@@ -1,7 +1,3 @@
-parameters:
-    # Password1
-    hash: $argon2id$v=19$m=65536,t=4,p=1$1n1H3N2SyAqWfUZlqZ1XyQ$lTTLuhNy2zARBw21oucweM/p8aTbuSixeDwqTQkLiUE
-
 App\Entity\Exam:
     exam:
       title: Friends quiz

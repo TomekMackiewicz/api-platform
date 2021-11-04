@@ -9,30 +9,15 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 class UsersTest extends ApiTestCase
 {
-    use RefreshDatabaseTrait; //ReloadDatabaseTrait RefreshDatabaseTrait;
-
-    public static function setUpBeforeClass(): void
-    {
-        //self::$purgeWithTruncate = true;
-
-        //$kernel = self::bootKernel();
-        //$entityManager = $kernel->getContainer()->get('doctrine')->getManager();
-        // $conn = $entityManager->getConnection();
-        // $sql = 'ALTER SEQUENCE user_id_seq RESTART WITH 1';
-        // $stmt = $conn->prepare($sql);
-        // $stmt->execute();
-
-        // Purge all the fixtures data when the tests are finished
-        //$purger = new ORMPurger($entityManager);
-        // Purger mode 2 truncates, resetting autoincrements
-        //$purger->setPurgeMode(2);
-        //$purger->purge();
-    }
+    use RefreshDatabaseTrait;
 
     ##############################################################################
     # LOGIN
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testLoginWithValidCredentials(): void
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -47,6 +32,9 @@ class UsersTest extends ApiTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    /**
+     * @group user
+     */
     public function testLoginWithInvalidCredentials(): void
     {
         static::createClient()->request('POST', '/authentication_token', [
@@ -65,6 +53,9 @@ class UsersTest extends ApiTestCase
     # REGISTER
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testRegisterWithValidEmailAndPassword()
     {
         static::createClient()->request('POST', '/api/users', [
@@ -80,6 +71,9 @@ class UsersTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
+    /**
+     * @group user
+     */
     public function testRegisterWithInvalidEmail()
     {
         static::createClient()->request('POST', '/api/users', [
@@ -96,6 +90,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['hydra:description' => 'email: The email \'"invalidemail.com"\' is not a valid email.']);
     }
 
+    /**
+     * @group user
+     */
     public function testRegisterWithInvalidPassword()
     {
         static::createClient()->request('POST', '/api/users', [
@@ -116,6 +113,9 @@ class UsersTest extends ApiTestCase
     # GET COLLECTION
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testNotLoggedUserCantGetUsers()
     {
         static::createClient()->request('GET', '/api/users');
@@ -125,6 +125,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['message' => 'JWT Token not found']);
     }
 
+    /**
+     * @group user
+     */
     public function testLoggedUserCantGetUsers()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -143,6 +146,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
     }
 
+    /**
+     * @group user
+     */
     public function testAdminCanGetUsers()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -165,6 +171,9 @@ class UsersTest extends ApiTestCase
     # GET ITEM
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testNonLoggedUserCantGetUser()
     {
         static::createClient()->request('GET', '/api/users/1'); 
@@ -174,6 +183,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['message' => 'JWT Token not found']);
     }
 
+    /**
+     * @group user
+     */
     public function testLoggedUserCantGetUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -192,6 +204,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
     }
 
+    /**
+     * @group user
+     */
     public function testAdminCanGetUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -202,9 +217,9 @@ class UsersTest extends ApiTestCase
             ],
         ]);
         $json = $response->toArray();
-        
+
         static::createClient()->request('GET', '/api/users/1', ['auth_bearer' => $json['token']]);       
-        
+
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceItemJsonSchema(User::class);
@@ -214,6 +229,9 @@ class UsersTest extends ApiTestCase
     # PATCH
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testNotLoggedUserCantPatchOtherUser()
     {
         static::createClient()->request('PATCH', '/api/users/2', [
@@ -228,6 +246,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['message' => 'JWT Token not found']);
     }
 
+    /**
+     * @group user
+     */
     public function testLoggedUserCantPatchOtherUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -252,6 +273,9 @@ class UsersTest extends ApiTestCase
         $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
     }
 
+    /**
+     * @group user
+     */
     public function testLoggedUserCanPatchHimself()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -276,6 +300,9 @@ class UsersTest extends ApiTestCase
         $this->assertMatchesResourceItemJsonSchema(User::class);
     }
 
+    /**
+     * @group user
+     */
     public function testAdminCanPatchOtherUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -304,12 +331,18 @@ class UsersTest extends ApiTestCase
     # DELETE
     ##############################################################################
 
+    /**
+     * @group user
+     */
     public function testNotLoggedUserCantDeleteUser()
     {
         static::createClient()->request('DELETE', '/api/users/1'); 
         $this->assertResponseStatusCodeSame(401);
     }
 
+    /**
+     * @group user
+     */
     public function testLoggedUserCantDeleteUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
@@ -328,6 +361,9 @@ class UsersTest extends ApiTestCase
         $this->assertResponseStatusCodeSame(403);        
     }
 
+    /**
+     * @group user
+     */
     public function testAdminCanDeleteUser()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
