@@ -48,13 +48,16 @@ Other useful commands:
 
 ```sh
 php bin/console doctrine:query:sql "ALTER SEQUENCE user_id_seq RESTART WITH 1"
-php bin/phpunit
+bin/phpunit --group user
+
+php bin/console doctrine:query:sql "ALTER SEQUENCE exam_id_seq RESTART WITH 1"
+bin/phpunit --group exam
 ```
 
-Or simply:
+Or simply bash test.sh <entity>, for example:
 
 ```sh
-bash test.sh
+bash test.sh exam
 ```
 
 ## Redis
