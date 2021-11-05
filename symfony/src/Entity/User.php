@@ -50,14 +50,14 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="validation.not_blank")
      */
-    private string $username;
+    private string $username = '';
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="validation.not_blank")
      * @Assert\Email(message="validation.email")
      */
-    private string $email;
+    private string $email = '';
 
     /**
      * @ORM\Column(type="json")
@@ -74,7 +74,7 @@ class User implements UserInterface
      *   message="validation.invalid_password"
      * )
      */
-    private string $password;
+    private string $password = '';
 
     /**
      * @ORM\Column(type="integer", nullable=true)

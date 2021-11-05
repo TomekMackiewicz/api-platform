@@ -45,7 +45,7 @@ class Exam
      *   message="validation.not_string"
      * )
      */
-    private string $title;
+    private string $title = '';
 
     /**
      * @ORM\Column(type="text", nullable=true)
