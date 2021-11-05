@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ContextAwareCollectionDataProviderInterface;
@@ -26,14 +28,15 @@ final class UserCollectionDataProvider implements ContextAwareCollectionDataProv
 
     public function getCollection(string $resourceClass, string $operationName = null, array $context = []): iterable
     {
-        $cacheKey = 'users';
-        $users = $this->cache->getItem($cacheKey);
-        if (!$users->isHit()) {
-            $users->set($this->repository->findAll());
-            $users->expiresAfter(new \DateInterval('PT1H'));
-            $this->cache->save($users);
-        }
+        return $this->repository->findAll();
+        // $cacheKey = 'users';
+        // $users = $this->cache->getItem($cacheKey);
+        // if (!$users->isHit()) {
+        //     $users->set($this->repository->findAll());
+        //     $users->expiresAfter(new \DateInterval('PT1H'));
+        //     $this->cache->save($users);
+        // }
 
-        return $users->get('users');
+        // return $users->get('users');
     }
 }

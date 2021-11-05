@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
@@ -7,7 +9,7 @@ use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use App\Entity\Exam;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
-class ExamTest extends ApiTestCase
+class ExamsTest extends ApiTestCase
 {
     use RefreshDatabaseTrait;
 
