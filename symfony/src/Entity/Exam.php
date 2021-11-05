@@ -29,8 +29,8 @@ use Doctrine\Common\Collections\Collection;
 class Exam
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
     private ?int $id = null;
