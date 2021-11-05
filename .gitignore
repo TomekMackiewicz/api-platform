@@ -3,3 +3,4 @@
 /.env.prod
 /docker/database/data
 /symfony/nbproject/private/
+.vscode
