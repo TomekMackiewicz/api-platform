@@ -89,7 +89,7 @@ class UsersTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains(['hydra:description' => 'email: The email \'"invalidemail.com"\' is not a valid email.']);
+        $this->assertJsonContains(['hydra:description' => 'email: validation.email']);
     }
 
     /**
@@ -108,7 +108,7 @@ class UsersTest extends ApiTestCase
 
         $this->assertResponseStatusCodeSame(422);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertJsonContains(['hydra:description' => 'password: Password is required to be minimum 6 chars in length and to include at least one letter and one number.']);
+        $this->assertJsonContains(['hydra:description' => 'password: validation.invalid_password']);
     }
 
     ##############################################################################
@@ -121,7 +121,7 @@ class UsersTest extends ApiTestCase
     public function testNotLoggedUserCantGetUsers()
     {
         static::createClient()->request('GET', '/api/users');
-        
+
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
         $this->assertJsonContains(['message' => 'JWT Token not found']);
@@ -140,9 +140,9 @@ class UsersTest extends ApiTestCase
             ],
         ]);
         $json = $response->toArray();
-        
-        static::createClient()->request('GET', '/api/users?page=1', ['auth_bearer' => $json['token']]);       
-        
+
+        static::createClient()->request('GET', '/api/users?page=1', ['auth_bearer' => $json['token']]);
+
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
@@ -161,9 +161,9 @@ class UsersTest extends ApiTestCase
             ],
         ]);
         $json = $response->toArray();
-       
-        static::createClient()->request('GET', '/api/users?page=1', ['auth_bearer' => $json['token']]); 
-        
+
+        static::createClient()->request('GET', '/api/users?page=1', ['auth_bearer' => $json['token']]);
+
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceCollectionJsonSchema(User::class);
@@ -178,7 +178,7 @@ class UsersTest extends ApiTestCase
      */
     public function testNonLoggedUserCantGetUser()
     {
-        static::createClient()->request('GET', '/api/users/1'); 
+        static::createClient()->request('GET', '/api/users/1');
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
@@ -199,7 +199,7 @@ class UsersTest extends ApiTestCase
         ]);
         $json = $response->toArray();
         
-        static::createClient()->request('GET', '/api/users/1', ['auth_bearer' => $json['token']]); 
+        static::createClient()->request('GET', '/api/users/1', ['auth_bearer' => $json['token']]);
 
         $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -220,7 +220,7 @@ class UsersTest extends ApiTestCase
         ]);
         $json = $response->toArray();
 
-        static::createClient()->request('GET', '/api/users/1', ['auth_bearer' => $json['token']]);       
+        static::createClient()->request('GET', '/api/users/1', ['auth_bearer' => $json['token']]);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -240,8 +240,8 @@ class UsersTest extends ApiTestCase
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'username' => 'Test2'
-            ]            
-        ]); 
+            ]
+        ]);
 
         $this->assertResponseStatusCodeSame(401);
         $this->assertResponseHeaderSame('content-type', 'application/json');
@@ -267,7 +267,7 @@ class UsersTest extends ApiTestCase
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
                 'username' => 'User2'
-            ]            
+            ]
         ]);
 
         $this->assertResponseStatusCodeSame(403);
@@ -294,7 +294,7 @@ class UsersTest extends ApiTestCase
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
                 'username' => 'User2'
-            ]            
+            ]
         ]);
 
         $this->assertResponseStatusCodeSame(200);
@@ -321,9 +321,9 @@ class UsersTest extends ApiTestCase
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
                 'username' => 'User2'
-            ]            
-        ]); 
-        
+            ]
+        ]);
+
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceItemJsonSchema(User::class);
@@ -357,10 +357,10 @@ class UsersTest extends ApiTestCase
         $json = $response->toArray();
 
         static::createClient()->request('DELETE', '/api/users/1', [
-            'auth_bearer' => $json['token']           
-        ]); 
+            'auth_bearer' => $json['token']
+        ]);
         
-        $this->assertResponseStatusCodeSame(403);        
+        $this->assertResponseStatusCodeSame(403);
     }
 
     /**
@@ -378,10 +378,185 @@ class UsersTest extends ApiTestCase
         $json = $response->toArray();
 
         static::createClient()->request('DELETE', '/api/users/2', [
-            'auth_bearer' => $json['token']           
-        ]); 
+            'auth_bearer' => $json['token']
+        ]);
         
         $this->assertResponseStatusCodeSame(204);
-    } 
+    }
 
+    ##############################################################################
+    # VALIDATION
+    ##############################################################################
+
+    /**
+     * @group user
+     */
+    public function testBlankUsername()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'ross@gmail.com',
+                'password' => 'Password1',
+                'username' => ''
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'username: validation.not_blank']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testUniqueUsername()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'monika@gmail.com',
+                'password' => 'Password1',
+                'username' => 'Admin'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'username: validation.unique']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+
+    /**
+     * @group user
+     */
+    public function testBlankEmail()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => '',
+                'password' => 'Password1',
+                'username' => 'Rachel'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'email: validation.not_blank']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testUniqueEmail()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'admin@gmail.com',
+                'password' => 'Password1',
+                'username' => 'Chandler'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'email: validation.unique']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testRolesInvalidChoice()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'chandler@gmail.com',
+                'password' => 'Password1',
+                'username' => 'Chandler',
+                'roles' => ['ROLE_CHANDLER']
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'roles: validation.invalid_choice']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testBlankPassword()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'chandler@gmail.com',
+                'password' => '',
+                'username' => 'Chandler'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'password: validation.not_blank']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testPasswordRegexLength()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'joey@gmail.com',
+                'password' => 'Pass1',
+                'username' => 'Joey'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'password: validation.invalid_password']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testPasswordRegexOneUppercase()
+    {
+        static::createClient()->request('POST', '/api/users', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'joey@gmail.com',
+                'password' => 'nouppercase1',
+                'username' => 'Joey'
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertJsonContains(['hydra:description' => 'password: validation.invalid_password']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
+    /**
+     * @group user
+     */
+    public function testPasswordRegexOneNumber()
+    {        static::createClient()->request('POST', '/api/users', [
+        'headers' => ['Content-Type' => 'application/json'],
+        'json' => [
+            'email' => 'joey@gmail.com',
+            'password' => 'Nonumber',
+            'username' => 'Joey'
+        ]
+    ]);
+
+    $this->assertResponseStatusCodeSame(422);
+    $this->assertJsonContains(['hydra:description' => 'password: validation.invalid_password']);
+    $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
 }

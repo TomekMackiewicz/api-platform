@@ -15,7 +15,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
- * @UniqueEntity("email")
+ * @UniqueEntity("email", message="validation.unique")
+ * @UniqueEntity("username", message="validation.unique")
  * @ApiResource(
  *   collectionOperations={
  *     "get"={"security"="is_granted('ROLE_ADMIN')"},
@@ -47,32 +48,30 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="validation.not_blank")
      */
-    private string $username = '';
+    private string $username;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank
-     * @Assert\Email(
-     *   message = "The email '{{ value }}' is not a valid email."
-     * )
+     * @Assert\NotBlank(message="validation.not_blank")
+     * @Assert\Email(message="validation.email")
      */
-    private string $email = '';
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
-     * @Assert\Choice(choices=User::ROLES, message="Role name is invalid.")
+     * @Assert\Choice(choices=User::ROLES, message="validation.invalid_choice")
      */
     private iterable $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="validation.not_blank")
      * @Assert\Regex(
      *   pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.).{6,}$/",
-     *   message="Password is required to be minimum 6 chars in length and to include at least one letter and one number."
+     *   message="validation.invalid_password"
      * )
      */
     private string $password;
@@ -81,9 +80,9 @@ class User implements UserInterface
      * @ORM\Column(type="integer", nullable=true)
      * @Assert\Type(
      *   type="integer",
-     *   message="The value {{ value }} is not a valid {{ type }}."
+     *   message="validation.not_int"
      * )
-     * @Assert\Choice({0, 1})
+     * @Assert\Choice({0, 1}, message="validation.choice")
      * @ApiProperty(security="is_granted('ROLE_ADMIN')")
      */
     private ?int $status = null;
@@ -93,7 +92,7 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -145,12 +144,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getStatus(): int
+    public function getStatus(): ?int
     {
         return (int) $this->status;
     }
 
-    public function setStatus(int $status): self
+    public function setStatus(?int $status): self
     {
         $this->status = $status;
 
