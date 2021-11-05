@@ -184,6 +184,43 @@ class ExamsTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
+    /**
+     * @group exam
+     */
+    public function testEmptyTitle()
+    {
+        $response = static::createClient()->request('POST', '/authentication_token', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'admin@gmail.com',
+                'password' => 'Password1',
+            ],
+        ]);
+        $json = $response->toArray();
+
+        static::createClient()->request('POST', '/api/exams', [
+            'auth_bearer' => $json['token'],
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'title' => '',
+                'description' => 'The Ultimate "Friends" Trivia Quiz',
+                'summary' => 'Are you a true fan?',
+                'duration' => 3600,
+                'nextSubmissionAfter' => 3600,
+                'ttl' => 36000,
+                'usePagination' => true,
+                'questionsPerPage' => 5,
+                'shuffleQuestions' => false,
+                'immediateAnswers' => false,
+                'restrictSubmissions' => false,
+                'allowedSubmissions' => 2
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    }
+
     ##############################################################################
     # PATCH
     ##############################################################################

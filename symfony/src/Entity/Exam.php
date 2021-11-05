@@ -45,7 +45,7 @@ class Exam
      *   message="validation.not_string"
      * )
      */
-    private string $title = '';
+    private string $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -162,7 +162,7 @@ class Exam
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -239,7 +239,7 @@ class Exam
         return $this->usePagination;
     }
 
-    public function setUsePagination(bool $usePagination): self
+    public function setUsePagination(?bool $usePagination): self
     {
         $this->usePagination = $usePagination;
 
