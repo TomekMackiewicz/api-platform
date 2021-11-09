@@ -1,0 +1,15 @@
+parameters:
+    names:
+      - 'Rachel'
+      - 'Phoebe'
+      - 'Joey'
+      - 'Chandler'
+      - 'Ross'
+
+App\Entity\Answer:
+    answers_{1..12}:
+        title: '<randomElement(<{names}>)>'
+        isCorrect: <boolean(50)>
+        message: ''
+        points: <numberBetween(1, 4)>
+        question: '@question*'
