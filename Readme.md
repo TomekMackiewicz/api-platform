@@ -47,18 +47,25 @@ Other useful commands:
 ## Testing
 reset sequence for functional tests
 ```sh
-php bin/console doctrine:query:sql "ALTER SEQUENCE user_id_seq RESTART WITH 1"
+php bin/console doctrine:query:sql "ALTER SEQUENCE users_id_seq RESTART WITH 1"
 bin/phpunit --group users
 
-php bin/console doctrine:query:sql "ALTER SEQUENCE exam_id_seq RESTART WITH 1"
+php bin/console doctrine:query:sql "ALTER SEQUENCE exams_id_seq RESTART WITH 1"
 bin/phpunit --group exams
 ```
 
-Or simply bash test.sh <entity>, for example:
+Run bash test.sh <entity>:
 
 ```sh
-bash test.sh exams
+bash test-group.sh exams
 ```
+
+to test single class, or:
+
+```sh
+bash test-all.sh exams
+```
+to test all classes.
 
 ## Redis
 
