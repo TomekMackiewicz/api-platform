@@ -18,7 +18,7 @@ class ExamsTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testUserCanGetExam()
     {
@@ -39,7 +39,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testAdminCanGetExam()
     {
@@ -64,7 +64,7 @@ class ExamsTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testUserCanGetExams()
     {
@@ -85,7 +85,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testAdminCanGetExams()
     {
@@ -110,7 +110,7 @@ class ExamsTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testUserCantPostExams()
     {
@@ -148,7 +148,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testAdminCanPostExams()
     {
@@ -185,7 +185,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testEmptyTitle()
     {
@@ -226,7 +226,7 @@ class ExamsTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testUserCantPatchExams()
     {
@@ -264,7 +264,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testAdminCanPatchExams()
     {
@@ -306,7 +306,7 @@ class ExamsTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testUserCantDeleteExams()
     {
@@ -327,7 +327,7 @@ class ExamsTest extends ApiTestCase
     }
 
     /**
-     * @group exam
+     * @group exams
      */
     public function testAdminCanDeleteExams()
     {

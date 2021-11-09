@@ -14,7 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`user`")
+ * @ORM\Table(name="users")
  * @UniqueEntity("email", message="validation.unique")
  * @UniqueEntity("username", message="validation.unique")
  * @ApiResource(

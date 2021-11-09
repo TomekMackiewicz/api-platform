@@ -18,7 +18,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoginWithValidCredentials(): void
     {
@@ -35,7 +35,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoginWithInvalidCredentials(): void
     {
@@ -56,7 +56,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testRegisterWithValidEmailAndPassword()
     {
@@ -74,7 +74,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testRegisterWithInvalidEmail()
     {
@@ -93,7 +93,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testRegisterWithInvalidPassword()
     {
@@ -116,7 +116,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testNotLoggedUserCantGetUsers()
     {
@@ -128,7 +128,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoggedUserCantGetUsers()
     {
@@ -149,7 +149,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testAdminCanGetUsers()
     {
@@ -174,7 +174,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testNonLoggedUserCantGetUser()
     {
@@ -186,7 +186,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoggedUserCantGetUser()
     {
@@ -207,7 +207,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testAdminCanGetUser()
     {
@@ -232,7 +232,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testNotLoggedUserCantPatchOtherUser()
     {
@@ -249,7 +249,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoggedUserCantPatchOtherUser()
     {
@@ -276,7 +276,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoggedUserCanPatchHimself()
     {
@@ -303,7 +303,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testAdminCanPatchOtherUser()
     {
@@ -334,7 +334,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testNotLoggedUserCantDeleteUser()
     {
@@ -343,7 +343,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testLoggedUserCantDeleteUser()
     {
@@ -364,7 +364,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testAdminCanDeleteUser()
     {
@@ -389,7 +389,7 @@ class UsersTest extends ApiTestCase
     ##############################################################################
 
     /**
-     * @group user
+     * @group users
      */
     public function testBlankUsername()
     {
@@ -408,7 +408,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testUniqueUsername()
     {
@@ -428,7 +428,7 @@ class UsersTest extends ApiTestCase
 
 
     /**
-     * @group user
+     * @group users
      */
     public function testBlankEmail()
     {
@@ -447,7 +447,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testUniqueEmail()
     {
@@ -466,7 +466,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testRolesInvalidChoice()
     {
@@ -486,7 +486,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testBlankPassword()
     {
@@ -505,7 +505,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testPasswordRegexLength()
     {
@@ -524,7 +524,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testPasswordRegexOneUppercase()
     {
@@ -543,7 +543,7 @@ class UsersTest extends ApiTestCase
     }
 
     /**
-     * @group user
+     * @group users
      */
     public function testPasswordRegexOneNumber()
     {        static::createClient()->request('POST', '/api/users', [

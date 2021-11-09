@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=ExamRepository::class)
- * @ORM\Table(name="exam")
+ * @ORM\Table(name="exams")
  * @ApiResource(
  *   collectionOperations={
  *     "get",
@@ -146,16 +146,16 @@ class Exam
      */
     private ?int $allowedSubmissions = null;
 
-    // /**
-    //  * @var Question[] Questions for this exam.
-    //  * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="survey", cascade={"persist"}) 
-    //  */
-    // private iterable $questions;
+    /**
+     * @var Question[] Questions for this exam.
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="exam", cascade={"remove"}) 
+     */
+    private iterable $questions;
 
-    // public function __construct()
-    // {
-    //     $this->questions = new ArrayCollection();
-    // }
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -306,22 +306,22 @@ class Exam
         return $this;
     }
 
-    // public function getQuestions(): Collection
-    // {
-    //     return $this->questions;
-    // }
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
 
-    // public function addQuestion(Question $question): self
-    // {
-    //     $this->questions->add($question);
+    public function addQuestion(Question $question): self
+    {
+        $this->questions->add($question);
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeQuestion(Question $question): self
-    // {
-    //     $this->questions->removeElement($question);
+    public function removeQuestion(Question $question): self
+    {
+        $this->questions->removeElement($question);
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

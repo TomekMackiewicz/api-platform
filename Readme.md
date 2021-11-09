@@ -45,19 +45,19 @@ Other useful commands:
 ```
 
 ## Testing
-
+reset sequence for functional tests
 ```sh
 php bin/console doctrine:query:sql "ALTER SEQUENCE user_id_seq RESTART WITH 1"
-bin/phpunit --group user
+bin/phpunit --group users
 
 php bin/console doctrine:query:sql "ALTER SEQUENCE exam_id_seq RESTART WITH 1"
-bin/phpunit --group exam
+bin/phpunit --group exams
 ```
 
 Or simply bash test.sh <entity>, for example:
 
 ```sh
-bash test.sh exam
+bash test.sh exams
 ```
 
 ## Redis
