@@ -20,7 +20,7 @@ class QuestionsTest extends ApiTestCase
     /**
      * @group questions
      */
-    public function testUserCanGetQuestion()
+    public function testUserCantGetQuestion()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -33,9 +33,9 @@ class QuestionsTest extends ApiTestCase
 
         static::createClient()->request('GET', '/api/questions/1', ['auth_bearer' => $json['token']]);
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertMatchesResourceItemJsonSchema(Question::class);
+        $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
     }
 
     /**
@@ -66,7 +66,7 @@ class QuestionsTest extends ApiTestCase
     /**
      * @group questions
      */
-    public function testUserCanGetQuestions()
+    public function testUserCantGetQuestions()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -79,9 +79,9 @@ class QuestionsTest extends ApiTestCase
 
         static::createClient()->request('GET', '/api/questions?page=1', ['auth_bearer' => $json['token']]);
 
-        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseStatusCodeSame(403);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertMatchesResourceCollectionJsonSchema(Question::class);
+        $this->assertJsonContains(['hydra:description' => 'Access Denied.']);
     }
 
     /**

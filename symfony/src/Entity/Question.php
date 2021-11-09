@@ -17,11 +17,11 @@ use Doctrine\Common\Collections\Collection;
  * @ORM\Table(name="questions")
  * @ApiResource(
  *   collectionOperations={
- *     "get",
+ *     "get"={"security"="is_granted('ROLE_ADMIN')"},
  *     "post"={"security"="is_granted('ROLE_ADMIN')"}
  *   },
  *   itemOperations={
- *     "get",
+ *     "get"={"security"="is_granted('ROLE_ADMIN')"},
  *     "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN')"},
  *     "patch"={"security"="is_granted('ROLE_ADMIN')"}
