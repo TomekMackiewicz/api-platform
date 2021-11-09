@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\Exam;
+use App\Entity\Answer;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -96,17 +98,18 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Exam", inversedBy="questions")
      */
-    private $exam;
+    private ?Exam $exam = null;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question")
-    //  */
-    // private $answers;
+    /**
+     * @var Answer[] Answers for this question.
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question", cascade={"remove"})
+     */
+    private $answers;
 
-    // public function __construct()
-    // {
-    //     $this->answers = new ArrayCollection();
-    // }
+    public function __construct()
+    {
+        $this->answers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -185,24 +188,24 @@ class Question
         return $this;
     }
 
-    // public function getAnswers(): Collection
-    // {
-    //     return $this->answers;
-    // }
+    public function getAnswers(): Collection
+    {
+        return $this->answers;
+    }
 
-    // public function addAnswer(Answer $answer): self
-    // {
-    //     $this->answers->add($answer);
+    public function addAnswer(Answer $answer): self
+    {
+        $this->answers->add($answer);
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeAnswer(Answer $answer): self
-    // {
-    //     $this->answers->removeElement($answer);
+    public function removeAnswer(Answer $answer): self
+    {
+        $this->answers->removeElement($answer);
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getExam(): ?Exam
     {
