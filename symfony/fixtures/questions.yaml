@@ -1,0 +1,27 @@
+App\Entity\Question:
+    question1:
+      label: Which character has a twin?
+      description: Test description
+      type: radio
+      hint: No hint needed
+      isRequired: true
+      shuffleAnswers: true
+      exam: '@exam'
+
+    question2:
+      label: Who was Monica’s first kiss?
+      description: Test description
+      type: text
+      hint: No hint needed
+      isRequired: true
+      shuffleAnswers: false
+      exam: '@exam'
+
+    question3:
+      label: Which character has a twin?
+      description: 
+      type: radio
+      hint: 
+      isRequired: false
+      shuffleAnswers: true
+      exam: '@exam'

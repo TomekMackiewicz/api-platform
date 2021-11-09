@@ -12,4 +12,3 @@ App\Entity\Exam:
       immediateAnswers: false
       restrictSubmissions: false
       allowedSubmissions: 2
-      # questions
