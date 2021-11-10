@@ -21,7 +21,7 @@ use Doctrine\Common\Collections\Collection;
  *     "post"={"security"="is_granted('ROLE_ADMIN')"}
  *   },
  *   itemOperations={
- *     "get",
+ *     "get"={"security"="is_granted('ROLE_USER') or object.getRestrictSubmissions() == false"},
  *     "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN')"},
  *     "patch"={"security"="is_granted('ROLE_ADMIN')"}

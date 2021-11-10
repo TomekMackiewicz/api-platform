@@ -20,7 +20,7 @@ class ExamsTest extends ApiTestCase
     /**
      * @group exams
      */
-    public function testUserCanGetExam()
+    public function testLoggedUserCanGetRestrictedExam()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -31,11 +31,33 @@ class ExamsTest extends ApiTestCase
         ]);
         $json = $response->toArray();
 
-        static::createClient()->request('GET', '/api/exams/1', ['auth_bearer' => $json['token']]);
+        static::createClient()->request('GET', '/api/exams/2', ['auth_bearer' => $json['token']]);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceItemJsonSchema(Exam::class);
+    }
+
+    /**
+     * @group exams
+     */
+    public function testNonLoggedUserCanGetOpenExam()
+    {
+        static::createClient()->request('GET', '/api/exams/1');
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceItemJsonSchema(Exam::class);
+    }
+
+    /**
+     * @group exams
+     */
+    public function testNonLoggedUserCantGetRestrictedExam()
+    {
+        static::createClient()->request('GET', '/api/exams/2');
+
+        $this->assertResponseStatusCodeSame(401);
     }
 
     /**
@@ -52,7 +74,7 @@ class ExamsTest extends ApiTestCase
         ]);
         $json = $response->toArray();
 
-        static::createClient()->request('GET', '/api/exams/1', ['auth_bearer' => $json['token']]);
+        static::createClient()->request('GET', '/api/exams/2', ['auth_bearer' => $json['token']]);
 
         $this->assertResponseStatusCodeSame(200);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
@@ -66,7 +88,7 @@ class ExamsTest extends ApiTestCase
     /**
      * @group exams
      */
-    public function testUserCanGetExams()
+    public function testLoggedUserCanGetRestrictedExams()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -77,9 +99,25 @@ class ExamsTest extends ApiTestCase
         ]);
         $json = $response->toArray();
 
-        static::createClient()->request('GET', '/api/exams?page=1', ['auth_bearer' => $json['token']]);
+        $result = static::createClient()->request('GET', '/api/exams?page=1', ['auth_bearer' => $json['token']]);
+        $resultArray = $result->toArray();
 
         $this->assertResponseStatusCodeSame(200);
+        $this->assertCount(2, $resultArray['hydra:member']);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceCollectionJsonSchema(Exam::class);
+    }
+
+    /**
+     * @group exams
+     */
+    public function testNonLoggedUserCantGetRestrictedExams()
+    {
+        $result = static::createClient()->request('GET', '/api/exams?page=1');
+        $resultArray = $result->toArray();
+
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertCount(1, $resultArray['hydra:member']);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceCollectionJsonSchema(Exam::class);
     }
@@ -98,9 +136,11 @@ class ExamsTest extends ApiTestCase
         ]);
         $json = $response->toArray();
 
-        static::createClient()->request('GET', '/api/exams?page=1', ['auth_bearer' => $json['token']]);
+        $result = static::createClient()->request('GET', '/api/exams?page=1', ['auth_bearer' => $json['token']]);
+        $resultArray = $result->toArray();
 
         $this->assertResponseStatusCodeSame(200);
+        $this->assertCount(2, $resultArray['hydra:member']);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceCollectionJsonSchema(Exam::class);
     }
