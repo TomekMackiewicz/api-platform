@@ -63,7 +63,7 @@ bash test-group.sh exams
 to test single class, or:
 
 ```sh
-bash test-all.sh exams
+bash test-all.sh
 ```
 to test all classes.
 
@@ -77,8 +77,10 @@ GET [key]
 
 ## TODO
 
-- finish user tests
+- filters!
+- elastic!
 
-- roles?
+- registration: send confirmation email
+- register with fb / google
 
-The stream or file "/var/www/var/log/test.log" could not be opened in append mode: Failed to open stream: Permission denied
+wsl --shutdown ; wsl
