@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiProperty; // @ApiProperty(identifier=true) - tak w PF przy id, spr czy trzeba
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
@@ -30,8 +30,7 @@ use Doctrine\Common\Collections\Collection;
  *     "patch"={"security"="is_granted('ROLE_ADMIN')"}
  *   }
  * )
- * @ApiFilter(BooleanFilter::class, properties={"restrictSubmissions"})
- * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "ipartial"})
  */
 class Exam
 {
