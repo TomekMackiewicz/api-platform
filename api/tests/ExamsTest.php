@@ -6,12 +6,27 @@ namespace App\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
-use App\Entity\Exam;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Exam;
+use App\Entity\Category;
 
 class ExamsTest extends ApiTestCase
 {
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private static $entityManager;
+
     use RefreshDatabaseTrait;
+
+    public static function setUpBeforeClass(): void
+    {
+        $kernel = self::bootKernel();
+        self::$entityManager = $kernel->getContainer()
+            ->get('doctrine')
+            ->getManager();
+    }
 
     ##############################################################################
     # GET ITEM
@@ -340,6 +355,39 @@ class ExamsTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceItemJsonSchema(Exam::class);
     }
+
+    // /**
+    //  * @group exams
+    //  */
+    // public function testAddCategory()
+    // {
+    //     $response = static::createClient()->request('POST', '/authentication_token', [
+    //         'headers' => ['Content-Type' => 'application/json'],
+    //         'json' => [
+    //             'email' => 'admin@gmail.com',
+    //             'password' => 'Password1',
+    //         ],
+    //     ]);
+    //     $json = $response->toArray();
+
+    //     //$exam = static::createClient()->request('GET', '/api/exams/1', ['auth_bearer' => $json['token']]);
+    //     //die(print_r($exam->getContent()));
+    //     $category = new Category();
+    //     $category->setLabel('Test label');
+
+    //     $exam = new Exam();
+    //     $exam->setTitle('Example');
+    //     $exam->addCategory($category);
+
+    //     self::$entityManager->persist($exam);
+    //     self::$entityManager->flush();
+
+    //     $this->assertResponseStatusCodeSame(200);
+    //     $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+    //     $this->assertMatchesResourceItemJsonSchema(Exam::class);
+    // }
+
+    // Test remove category
 
     ##############################################################################
     # DELETE

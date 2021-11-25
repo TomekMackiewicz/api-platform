@@ -156,9 +156,16 @@ class Exam
      */
     private iterable $questions;
 
+    /**
+     * @var Category[] Categories for this exam.
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="exams")
+     */
+    private $categories;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -326,6 +333,24 @@ class Exam
     {
         $this->questions->removeElement($question);
 
+        return $this;
+    }
+
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+        return $this;
+    }
+    public function removeCategory(Category $category): self
+    {
+        $this->categories->removeElement($category);
         return $this;
     }
 }

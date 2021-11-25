@@ -1,0 +1,7 @@
+App\Entity\Category:
+    category1:
+        label: Quizes
+        exams: ['@exam']
+    category2:
+        label: Exams
+        exams: ['@exam', '@restrictedExam']
