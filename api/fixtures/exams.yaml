@@ -12,6 +12,7 @@ App\Entity\Exam:
       immediateAnswers: false
       restrictSubmissions: false
       allowedSubmissions: 2
+      categories: ['@category1']
 
     restrictedExam:
       title: Friends restricted quiz
@@ -26,3 +27,7 @@ App\Entity\Exam:
       immediateAnswers: false
       restrictSubmissions: true
       allowedSubmissions: 2
+      categories: ['@category1', '@category2']
+    
+    thirdExam:
+      title: Third exam

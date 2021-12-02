@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -44,6 +45,7 @@ class Category
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private string $label = '';
 
@@ -84,7 +86,6 @@ class Category
     {
         if (!$this->exams->contains($exam)) {
             $this->exams[] = $exam;
-            $exam->addCategory($this);
         }
 
         return $this;

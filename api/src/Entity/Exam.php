@@ -12,13 +12,16 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ExamRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=ExamRepository::class)
  * @ORM\Table(name="exams")
  * @ApiResource(
+ *   attributes={"normalization_context": {"groups"={"read"}, "enable_max_depth"=true}},
  *   collectionOperations={
  *     "get",
  *     "post"={"security"="is_granted('ROLE_ADMIN')"}
@@ -28,7 +31,9 @@ use Doctrine\Common\Collections\Collection;
  *     "put"={"security"="is_granted('ROLE_ADMIN')"},
  *     "delete"={"security"="is_granted('ROLE_ADMIN')"},
  *     "patch"={"security"="is_granted('ROLE_ADMIN')"}
- *   }
+ *   },
+ *   normalizationContext={"groups"={"read"}},
+ *   denormalizationContext={"groups"={"post"}}
  * )
  * @ApiFilter(SearchFilter::class, properties={"title": "ipartial"})
  */
@@ -48,6 +53,7 @@ class Exam
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private string $title = '';
 
@@ -57,6 +63,7 @@ class Exam
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private ?string $description = null;
 
@@ -66,6 +73,7 @@ class Exam
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private ?string $summary = null;
 
@@ -75,6 +83,7 @@ class Exam
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $duration = null;
 
@@ -84,6 +93,7 @@ class Exam
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $nextSubmissionAfter = null;
 
@@ -93,6 +103,7 @@ class Exam
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $ttl = null;
 
@@ -102,6 +113,7 @@ class Exam
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $usePagination = null;
 
@@ -111,6 +123,7 @@ class Exam
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $questionsPerPage = null;
 
@@ -120,6 +133,7 @@ class Exam
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $shuffleQuestions = null;
 
@@ -129,6 +143,7 @@ class Exam
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $immediateAnswers = null;
 
@@ -138,6 +153,7 @@ class Exam
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $restrictSubmissions = null;
 
@@ -147,18 +163,23 @@ class Exam
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $allowedSubmissions = null;
 
     /**
      * @var Question[] Questions for this exam.
-     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="exam", cascade={"remove"}) 
+     * @ORM\OneToMany(targetEntity="App\Entity\Question", mappedBy="exam", cascade={"persist", "remove"})
+     * @Groups({"read", "post"})
+     * @MaxDepth(1)
      */
     private iterable $questions;
 
     /**
      * @var Category[] Categories for this exam.
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="exams")
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="exams", cascade={"persist"})
+     * @Groups({"read", "post"})
+     * @MaxDepth(1)
      */
     private $categories;
 
@@ -325,6 +346,7 @@ class Exam
     public function addQuestion(Question $question): self
     {
         $this->questions->add($question);
+        $question->setExam($this);
 
         return $this;
     }

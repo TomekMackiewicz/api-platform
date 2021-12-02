@@ -42,7 +42,7 @@ class CategoriesTest extends ApiTestCase
     /**
      * @group categories
      */
-    public function testAdminCanGetQuestion()
+    public function testAdminCanGetCategory()
     {
         $response = static::createClient()->request('POST', '/authentication_token', [
             'headers' => ['Content-Type' => 'application/json'],

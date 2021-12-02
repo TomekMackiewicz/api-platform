@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
@@ -42,6 +43,7 @@ class Answer
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private string $title = '';
 
@@ -51,6 +53,7 @@ class Answer
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $isCorrect = null;
 
@@ -60,6 +63,7 @@ class Answer
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private ?string $message = '';
 
@@ -69,6 +73,7 @@ class Answer
      *   type="integer",
      *   message="validation.not_int"
      * )
+     * @Groups({"read", "post"})
      */
     private ?int $points = null;
 

@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Exam;
@@ -46,6 +47,7 @@ class Question
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private string $label = '';
 
@@ -55,6 +57,7 @@ class Question
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private ?string $description = '';
 
@@ -65,6 +68,7 @@ class Question
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private string $type = '';
 
@@ -74,6 +78,7 @@ class Question
      *   type="string",
      *   message="validation.not_string"
      * )
+     * @Groups({"read", "post"})
      */
     private ?string $hint = '';
 
@@ -83,6 +88,7 @@ class Question
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $isRequired = null;
 
@@ -92,6 +98,7 @@ class Question
      *   type="bool",
      *   message="validation.not_bool"
      * )
+     * @Groups({"read", "post"})
      */
     private ?bool $shuffleAnswers = null;
 
@@ -102,7 +109,8 @@ class Question
 
     /**
      * @var Answer[] Answers for this question.
-     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question", cascade={"persist", "remove"})
+     * @Groups({"read", "post"})
      */
     private $answers;
 
@@ -196,6 +204,7 @@ class Question
     public function addAnswer(Answer $answer): self
     {
         $this->answers->add($answer);
+        $answer->setQuestion($this);
 
         return $this;
     }
