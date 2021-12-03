@@ -8,8 +8,13 @@ use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use App\Entity\Exam;
 use App\Entity\Category;
+use App\Entity\Question;
 
 class ExamsTest extends ApiTestCase
 {
@@ -118,7 +123,7 @@ class ExamsTest extends ApiTestCase
         $resultArray = $result->toArray();
 
         $this->assertResponseStatusCodeSame(200);
-        $this->assertCount(2, $resultArray['hydra:member']);
+        $this->assertCount(3, $resultArray['hydra:member']);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceCollectionJsonSchema(Exam::class);
     }
@@ -155,7 +160,7 @@ class ExamsTest extends ApiTestCase
         $resultArray = $result->toArray();
 
         $this->assertResponseStatusCodeSame(200);
-        $this->assertCount(2, $resultArray['hydra:member']);
+        $this->assertCount(3, $resultArray['hydra:member']);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertMatchesResourceCollectionJsonSchema(Exam::class);
     }
@@ -276,6 +281,63 @@ class ExamsTest extends ApiTestCase
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
     }
 
+    /**
+     * @group exams
+     */
+    public function testPostRelations()
+    {
+        $response = static::createClient()->request('POST', '/authentication_token', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'admin@gmail.com',
+                'password' => 'Password1',
+            ],
+        ]);
+        $json = $response->toArray();
+
+        $x = static::createClient()->request('POST', '/api/exams', [
+            'auth_bearer' => $json['token'],
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'title' => 'Yet another title...',
+                'categories' => ['/api/categories/1', '/api/categories/2'],
+                'questions' => ['/api/questions/1', '/api/questions/2', '/api/questions/3'],
+            ]
+        ]);
+
+        $this->assertResponseStatusCodeSame(201);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceItemJsonSchema(Exam::class);
+        $this->assertJsonContains([
+            'categories' => [
+                [
+                  '@id' => '/api/categories/1',
+                  '@type' => 'Category',
+                  'label' => 'Quizes'
+                ],
+                [
+                  '@id' => '/api/categories/2',
+                  '@type' => 'Category',
+                  'label' => 'Exams'
+                ]
+            ]
+        ]);
+        $this->assertJsonContains([
+            'questions' => [
+                [
+                    "@id" => "/api/questions/1",
+                    "@type" => "Question",
+                    "label" => "Which character has a twin?",
+                    "description" => "Test description",
+                    "type" => "radio",
+                    "hint" => "No hint needed",
+                    "isRequired" => true,
+                    "shuffleAnswers" => true
+                ]
+            ]
+        ]);
+    }
+
     ##############################################################################
     # PATCH
     ##############################################################################
@@ -356,38 +418,56 @@ class ExamsTest extends ApiTestCase
         $this->assertMatchesResourceItemJsonSchema(Exam::class);
     }
 
-    // /**
-    //  * @group exams
-    //  */
-    // public function testAddCategory()
-    // {
-    //     $response = static::createClient()->request('POST', '/authentication_token', [
-    //         'headers' => ['Content-Type' => 'application/json'],
-    //         'json' => [
-    //             'email' => 'admin@gmail.com',
-    //             'password' => 'Password1',
-    //         ],
-    //     ]);
-    //     $json = $response->toArray();
+    /**
+     * @group exams
+     */
+    public function testPatchRelations()
+    {
+        $response = static::createClient()->request('POST', '/authentication_token', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'admin@gmail.com',
+                'password' => 'Password1',
+            ],
+        ]);
+        $json = $response->toArray();
 
-    //     //$exam = static::createClient()->request('GET', '/api/exams/1', ['auth_bearer' => $json['token']]);
-    //     //die(print_r($exam->getContent()));
-    //     $category = new Category();
-    //     $category->setLabel('Test label');
+        $x = static::createClient()->request('PATCH', '/api/exams/2', [
+            'auth_bearer' => $json['token'],
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+            'json' => [
+                'categories' => ['/api/categories/1'],
+                'questions' => ['/api/questions/1', '/api/questions/2', '/api/questions/3'],
+            ]
+        ]);
 
-    //     $exam = new Exam();
-    //     $exam->setTitle('Example');
-    //     $exam->addCategory($category);
-
-    //     self::$entityManager->persist($exam);
-    //     self::$entityManager->flush();
-
-    //     $this->assertResponseStatusCodeSame(200);
-    //     $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-    //     $this->assertMatchesResourceItemJsonSchema(Exam::class);
-    // }
-
-    // Test remove category
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceItemJsonSchema(Exam::class);
+        $this->assertJsonContains([
+            'categories' => [
+                [
+                  '@id' => '/api/categories/1',
+                  '@type' => 'Category',
+                  'label' => 'Quizes'
+                ]
+            ]
+        ]);
+        $this->assertJsonContains([
+            'questions' => [
+                [
+                    "@id" => "/api/questions/1",
+                    "@type" => "Question",
+                    "label" => "Which character has a twin?",
+                    "description" => "Test description",
+                    "type" => "radio",
+                    "hint" => "No hint needed",
+                    "isRequired" => true,
+                    "shuffleAnswers" => true
+                ]
+            ]
+        ]);
+    }
 
     ##############################################################################
     # DELETE
@@ -433,5 +513,18 @@ class ExamsTest extends ApiTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(204);
+        $this->assertNull(
+            static::$container->get('doctrine')->getRepository(Exam::class)->findOneBy(['title' => 'Friends quiz'])
+        );
+        // After removing exam, related questions should be deleted
+        $this->assertNull(
+            static::$container->get('doctrine')->getRepository(Question::class)->findOneBy(['id' => 1])
+        );
+
+        // ... but related category should remain
+        static::createClient()->request('GET', '/api/categories/1', ['auth_bearer' => $json['token']]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceItemJsonSchema(Category::class);
     }
 }
