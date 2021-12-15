@@ -346,5 +346,9 @@ class QuestionsTest extends ApiTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(204);
+        // Related answers should be removed
+        $this->assertNull(
+            static::$container->get('doctrine')->getRepository(Question::class)->findOneBy(['id' => 1])
+        );
     }
 }

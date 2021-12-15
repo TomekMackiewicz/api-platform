@@ -301,6 +301,12 @@ class CategoriesTest extends ApiTestCase
         ]);
 
         $this->assertResponseStatusCodeSame(204);
+
+        // After deleting category relatex exam should stay
+        static::createClient()->request('GET', '/api/exams/1', ['auth_bearer' => $json['token']]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        $this->assertMatchesResourceItemJsonSchema(Exam::class);
     }
 
 }
