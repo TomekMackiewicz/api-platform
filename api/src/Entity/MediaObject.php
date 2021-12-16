@@ -75,6 +75,13 @@ class MediaObject
     public ?string $filePath = null;
 
     /**
+     * @var \DateTimeInterface|null
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"read", "post"})
+     */
+    private ?\DateTimeInterface $uploadedAt = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="media_object")
      */
     private ?Question $question = null;
@@ -84,9 +91,19 @@ class MediaObject
      */
     private ?Answer $answer = null;
 
+    public function __construct()
+    {
+        $this->uploadedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUploadedAt(): ?\DateTimeImmutable
+    {
+        return $this->uploadedAt;
     }
 
     public function getQuestion(): ?Question
