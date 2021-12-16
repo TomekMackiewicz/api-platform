@@ -125,6 +125,9 @@
             "fixtures/.gitignore"
         ]
     },
+    "jms/metadata": {
+        "version": "2.6.1"
+    },
     "justinrainbow/json-schema": {
         "version": "5.2.10"
     },
@@ -347,6 +350,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v5.2.12"
+    },
     "symfony/monolog-bridge": {
         "version": "v5.2.5"
     },
@@ -385,6 +391,9 @@
     },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.22.1"
+    },
+    "symfony/polyfill-intl-idn": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.22.1"
@@ -525,6 +534,15 @@
     },
     "twig/twig": {
         "version": "v3.3.0"
+    },
+    "vich/uploader-bundle": {
+        "version": "1.18",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.7",
+            "ref": "c4f5755b37fb65b9c6a3cbdae91205c15a137ed4"
+        }
     },
     "webmozart/assert": {
         "version": "1.10.0"

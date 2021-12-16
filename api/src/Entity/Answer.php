@@ -10,6 +10,9 @@ use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use App\Entity\MediaObject;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
@@ -78,9 +81,23 @@ class Answer
     private ?int $points = null;
 
     /**
+     * @var Question
      * @ORM\ManyToOne(targetEntity="App\Entity\Question", inversedBy="answers")
      */
-    private ?Question $question = null;
+    private Question $question;
+
+    /**
+     * @var MediaObject[] MediaObjects for this answer.
+     * @ORM\OneToMany(targetEntity="App\Entity\MediaObject", mappedBy="answer", cascade={"persist", "remove"})
+     * @Groups({"read", "post"})
+     * @ApiProperty(iri="http://schema.org/image")
+     */
+    private $images = [];
+
+    public function __construct()
+    {
+        $this->images = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -143,6 +160,26 @@ class Answer
     public function setQuestion(?Question $question): self
     {
         $this->question = $question;
+
+        return $this;
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(MediaObject $image): self
+    {
+        $this->images->add($image);
+        $image->setAnswer($this);
+
+        return $this;
+    }
+
+    public function removeImage(MediaObject $image): self
+    {
+        $this->images->removeElement($image);
 
         return $this;
     }

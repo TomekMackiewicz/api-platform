@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Exam;
 use App\Entity\Answer;
+use App\Entity\MediaObject;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -103,6 +104,7 @@ class Question
     private ?bool $shuffleAnswers = null;
 
     /**
+     * @var Exam
      * @ORM\ManyToOne(targetEntity="App\Entity\Exam", inversedBy="questions")
      */
     private ?Exam $exam = null;
@@ -112,11 +114,20 @@ class Question
      * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question", cascade={"persist", "remove"})
      * @Groups({"read", "post"})
      */
-    private $answers;
+    private $answers = [];
+
+    /**
+     * @var MediaObject[] MediaObjects for this question.
+     * @ORM\OneToMany(targetEntity="App\Entity\MediaObject", mappedBy="question", cascade={"persist", "remove"})
+     * @Groups({"read", "post"})
+     * @ApiProperty(iri="http://schema.org/image")
+     */
+    private $images = [];
 
     public function __construct()
     {
         $this->answers = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -224,6 +235,26 @@ class Question
     public function setExam(?Exam $exam): self
     {
         $this->exam = $exam;
+
+        return $this;
+    }
+
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(MediaObject $image): self
+    {
+        $this->images->add($image);
+        $image->setQuestion($this);
+
+        return $this;
+    }
+
+    public function removeImage(MediaObject $image): self
+    {
+        $this->images->removeElement($image);
 
         return $this;
     }
