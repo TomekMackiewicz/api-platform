@@ -21,7 +21,7 @@ use App\Repository\MediaObjectRepository;
  */
 #[ApiResource(
     iri: 'http://schema.org/MediaObject',
-    itemOperations: ['get'],
+    itemOperations: ['get', 'delete'],
     collectionOperations: [
         'get',
         'post' => [
@@ -66,6 +66,12 @@ class MediaObject
     /**
      * @Vich\UploadableField(mapping="media_object", fileNameProperty="filePath")
      * @Assert\NotNull(message="validation.not_null")
+     * @Assert\File(
+     *   maxSize = "1M",
+     *   mimeTypes = {"image/jpeg", "image/gif", "image/png"},
+     *   maxSizeMessage = "validation.max_upload_size",
+     *   mimeTypesMessage = "validation.mime_type"
+     * )
      */
     public ?File $file = null;
 
@@ -93,7 +99,7 @@ class MediaObject
 
     public function __construct()
     {
-        $this->uploadedAt = new \DateTimeImmutable();
+        $this->uploadedAt = new \DateTime('now');
     }
 
     public function getId(): ?int
@@ -101,7 +107,7 @@ class MediaObject
         return $this->id;
     }
 
-    public function getUploadedAt(): ?\DateTimeImmutable
+    public function getUploadedAt(): ?\DateTime
     {
         return $this->uploadedAt;
     }
