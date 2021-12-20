@@ -171,4 +171,9 @@ class User implements UserInterface
     {
         //$this->password = null;
     }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
 }
