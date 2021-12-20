@@ -7,31 +7,13 @@ namespace App\Tests;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use App\Entity\Exam;
 use App\Entity\Category;
 use App\Entity\Question;
 
 class ExamsTest extends ApiTestCase
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    private static $entityManager;
-
     use RefreshDatabaseTrait;
-
-    public static function setUpBeforeClass(): void
-    {
-        $kernel = self::bootKernel();
-        self::$entityManager = $kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-    }
 
     ##############################################################################
     # GET ITEM

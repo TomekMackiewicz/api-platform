@@ -114,7 +114,7 @@ class Question
      * @ORM\OneToMany(targetEntity="App\Entity\Answer", mappedBy="question", cascade={"persist", "remove"})
      * @Groups({"read", "post"})
      */
-    private $answers = [];
+    private iterable $answers = [];
 
     /**
      * @var MediaObject[] MediaObjects for this question.
@@ -122,7 +122,7 @@ class Question
      * @Groups({"read", "post"})
      * @ApiProperty(iri="http://schema.org/image")
      */
-    private $images = [];
+    private iterable $images = [];
 
     public function __construct()
     {

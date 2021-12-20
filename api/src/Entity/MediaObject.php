@@ -21,9 +21,12 @@ use App\Repository\MediaObjectRepository;
  */
 #[ApiResource(
     iri: 'http://schema.org/MediaObject',
-    itemOperations: ['get', 'delete'],
+    itemOperations: [
+        'get' => ["security" => "is_granted('ROLE_ADMIN')"],
+        'delete' => ["security" => "is_granted('ROLE_ADMIN')"]
+    ],
     collectionOperations: [
-        'get',
+        'get' => ["security" => "is_granted('ROLE_ADMIN')"],
         'post' => [
             'controller' => CreateMediaObjectAction::class,
             'deserialize' => false,
